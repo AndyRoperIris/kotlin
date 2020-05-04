@@ -1,6 +1,7 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 import jetbrains.buildServer.configs.kotlin.v2018_1.buildSteps.script
+//import jetbrains.buildServer.configs.kotlin.v2018_2.buildSteps.maven
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -35,8 +36,11 @@ object Build : BuildType({
     name = "Build"
     description = "Build Setting Test 123"
 
-    id("Build")
-        steps {
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    steps {
         script {
             name = "Set version using script"
             scriptContent = """
@@ -55,14 +59,12 @@ object Build : BuildType({
             echo "built artifact" > bin/compiled.txt
             """.trimIndent()
         }
-        }
-
-    vcs {
-        root(DslContext.settingsRoot)
     }
 
     triggers {
         vcs {
         }
     }
+
+    
 })
